@@ -133,12 +133,35 @@ const App = () => {
   };
 
   const scoreHandler = (e) => {
-   
+   if(e.target.textContent === currChar.name){
+    setScore(s => s+1);
+   }
+   else setScore(s => s-1);
   };
 
   useEffect(() => {
-   
-  });
+    let ind =Math.floor(Math.random()*19);
+    let curr = characters[ind];
+    console.log(curr);
+    let op = [curr];
+    let i = 0;
+    for(let chars of characters.slice().sort(()=>Math.random()-0.5)){
+      if(i===3) break;
+      if(chars !== curr) {
+        op.push(chars);
+        i++;
+      }
+    }
+
+    op.sort(()=>Math.random()-0.5);
+
+   setCurrChar({
+    name : curr.name,
+    role : curr.role,
+    abilities : curr.abilities,
+    options : op,
+   })
+  },[score]);
   return (
     <div id="main">
       <div className="container">
@@ -150,7 +173,7 @@ const App = () => {
           {currChar.abilities.join()}
           <div className="options">
             {currChar.options.map((option) => (
-              <button   onClick={scoreHandler}>
+              <button  key={option.name} onClick={scoreHandler}>
                 {option.name}
               </button>
             ))}
